@@ -1,1 +1,1 @@
-# Solid-Waste-Mangement
+# Solid-Waste-Management

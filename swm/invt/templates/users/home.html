@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{%block content%}
+    <div class="card">
+        <div class="card-body">
+            <div class="media">
+                <div class="media-body">
+                    <h2 class="account-heading">Welcome {{ wuser.username }},</h2>
+                    <p class="account-heading">{{ wuser.email }}</p>
+                    <small class="account-heading"><em>Last Login : {{ wuser.last_login }}</em></small>
+                    <br>
+                    <small class="account-heading"><em>Member since : {{ wuser.date_joined|date:"d F,Y" }}</em></small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+
+    <!-- For super users -->
+    {% if user.is_authenticated and user.is_superuser %}
+    <div class="card">
+        <div class="card-body">
+            <h4>Waste</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Transport Vehicle</th>
+                  </tr>
+                </thead>
+            
+                <tbody>
+            
+                  {% for waste in waste_list_admin %}
+            
+                  <tr>
+                    <td>{{ waste.waste_id }}
+                    <td>{{ waste.type_waste }}</td>
+                    <td>{{ waste.created_date }} </td>
+                    <td>{{ waste.quantity }}</td>
+                    <td>{{ waste.tv }}</td>
+                  </tr>
+            
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br>
+
+    <div class="card">
+        <div class="card-body">
+            <h4>Transport Vehicle</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Plate Number</th>
+                    <th>Capacity</th>
+                    <th>Pincode assigned to</th>
+                    <th>Processing Plant</th>
+                  </tr>
+                </thead>
+            
+                <tbody>
+            
+                  {% for tv in tv_list %}
+            
+                  <tr>
+                    <td>{{ tv.plate_number }}</td>
+                    <td>{{ tv.capacity }} </td>
+                    <td>{{ tv.pincode }}</td>
+                    <td>{{ tv.pp }}</td>
+                    <td>
+                      <a href="{% url 'update_tv' tv.pk %}" class="btn btn-warning btn-sm" role="button" aria-pressed="true" > Edit</a>
+                      <a href="{% url 'delete_tv' tv.pk%}" class="btn btn-danger btn-sm" role="button" aria-pressed="true" > X</a>
+                  </td>
+                  </tr>
+            
+                  {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'tv_form' %}" class="btn btn-outline-info">Create Transport Vehicle</a>
+        </div>
+    </div>
+    <br>
+
+    <div class="card">
+        <div class="card-body">
+            <h4>Processing Plant</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Total Waste*</th>
+                    <th>Landill Waste*</th>
+                    
+                  </tr>
+                </thead>
+            
+                <tbody>
+            
+                  {% for pp in pp_list %}
+            
+                  <tr>
+                    <td>{{ pp.ppname }}</td>
+                    <td>{{ pp.total_waste }} </td>
+                    <td>{{ pp.landfill_waste }}</td>
+                    <td>
+                      <a href="{% url 'update_pp' pp.pk %}" class="btn btn-warning btn-sm" role="button" aria-pressed="true" > Edit</a>
+                      <a href="{% url 'delete_pp' pp.pk%}" class="btn btn-danger btn-sm" role="button" aria-pressed="true" > X</a>
+                  </td>
+                  </tr>
+            
+                  {% endfor %}
+                </tbody>
+            </table>
+            <p>*Total Waste - Total waste collected by the Processing plant until now</p>
+            <p>*Landfill Waste - Total waste sent to Landfill until now</p>
+            <br>
+            <a href="{% url 'pp_form' %}" class="btn btn-outline-info">Create Processing Plant</a>
+        </div>
+    </div>
+    <br>
+
+    <div class="card">
+        <div class="card-body">
+            <h4>Landfill</h4>
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Maximum Capacity</th>
+                    <th>Capacity Filled</th>
+                    <th>Processing Plant</th>
+                  </tr>
+                </thead>
+            
+                <tbody>
+            
+                  {% for lf in lf_list %}
+            
+                  <tr>
+                    <td>{{ lf.lfname }}</td>
+                    <td>{{ lf.maximum_capacity }}</td>
+                    <td>{{ lf.capacity_filled }}</td>
+                    <td>{{ lf.pp }}</td>
+                    <td>
+                      <a href="{% url 'update_lf' lf.pk %}" class="btn btn-warning btn-sm" role="button" aria-pressed="true" > Edit</a>
+                      <a href="{% url 'delete_lf' lf.pk%}" class="btn btn-danger btn-sm" role="button" aria-pressed="true" > X</a>
+                  </td>
+                  </tr>
+            
+                  {% endfor %}
+                </tbody>
+            </table>
+            <a href="{% url 'lf_form' %}" class="btn btn-outline-info">Create Landfill</a>
+        </div>
+    </div>
+    <br>
+
+    <div class="card">
+      <div class="card-body">
+          <h3>Future trends in waste collection</h3>
+          <p>Click Here to export dataset</p>
+          <a href="{% url 'export' %}" class="btn btn-outline-info">Click Here</a>
+          <br><br>
+          <p>Click here to see the visualization of the future trends in waste collection</p>
+          <a href="{% url 'graph' %}" class="btn btn-outline-info">Click Here</a>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- For normal users -->
+    {% if user.is_authenticated and not user.is_superuser %}
+    <div class="card">
+        <div class="card-body">
+            <div class="media">
+                <div class="media-body">
+                    <h4><b>Want To fill the Waste Generation Form:</b></h4>
+                    <br><br>
+                    <a href="{% url 'waste_form' %}" class="btn btn-outline-info">Fill Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card">
+        <div class="card-body">
+            <div class="media">
+                <div class="media-body">
+                    <h4><strong>List of waste forms filled:</strong></h4>
+                    <br>
+                    {%for waste in waste_list%}
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card-title">
+                                    <h4>ID : {{waste.waste_id}}</h4>
+                                    <p>Date : {{waste.created_date|date:"d F,Y"}}</p>
+                                    <p>Type of Waste : {{waste.type_waste}}</p>
+                                    <p>Quantity : {{waste.quantity}}</p>  
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{%endblock content%}

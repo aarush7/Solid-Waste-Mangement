@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+{%block content%}
+    <h2 >Entries by {{ tuser.username }}</h2>
+    {%for waste in waste_list%}
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <h4>{{waste.waste_id}}</h4>
+                    <small class="float-right"><em>{{waste.created_date|date:"d F,Y"}}</em></small>
+                    <hr>
+                    <p>{{waste.type_waste}}</p>
+                    <p>{{waste.quantity}}</p>  
+                </div>
+            </div>
+        </div>  
+    {%endfor%}
+{%endblock content%}
